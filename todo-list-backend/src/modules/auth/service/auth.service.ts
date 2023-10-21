@@ -32,6 +32,7 @@ export class AuthService {
 
   async login(user: any) {
     const data = await this.authRepository.findByEmail(user.email);
+    
     if (!data) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -72,6 +73,9 @@ export class AuthService {
     };
     try {
       user = await this.authRepository.findByEmail(email);
+      if(!user){
+        return null
+      }
     } catch (error) {
       return null;
     }
