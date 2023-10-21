@@ -11,4 +11,11 @@ export const MessagesHelper = {
     PHONE_REQUIRED: 'Phone is required',
     PHONE_INVALID: 'Phone is invalid',
     CODE_REQUIRED: 'Code is required',
+    DESCRIPTION_REQUIRED: 'description task is required',
+    DESCRIPTION_INVALID: 'description is invalid',
+    CATEGORY_REQUIRED: 'category task is required',
+    CATEGORY_INVALID: 'category is invalid',
+    USER_ID_REQUIRED: 'user ID is required',
+    TASK_ID_REQUIRED: 'task ID is required',
+    TASK_ID_INVALID: 'task ID is invalid',
 }
