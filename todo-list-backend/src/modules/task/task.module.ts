@@ -7,10 +7,12 @@ import { CategoryRepository } from '../category/repository/category.repository';
 import { FindTasksService } from './service/reading/findTasks.service';
 import { AuthRepository } from '../auth/repository/auth.repository';
 import { DeleteTaskService } from './service/writing/deleteTask.service';
+import { ChangeStatusTaskService } from './service/writing/changeStatusTask.service';
+import { UpdateTaskService } from './service/writing/updateTask.service';
 
 @Module({
   imports: [],
   controllers: [TaskController],
-  providers: [CreateTaskService, TaskRepository, PrismaService, CategoryRepository, FindTasksService, AuthRepository, DeleteTaskService],
+  providers: [CreateTaskService, TaskRepository, PrismaService, CategoryRepository, FindTasksService, AuthRepository, DeleteTaskService, ChangeStatusTaskService, UpdateTaskService],
 })
 export class TaskModule {}
