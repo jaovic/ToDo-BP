@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
-import { ICreateTaskRepository, ITaskRepository } from "../structure/IRepository.structure";
+import { ICreateTaskRepository, ITaskRepository, IUpdateTaskRepository } from "../structure/IRepository.structure";
 import { Task } from "@prisma/client";
 
 @Injectable()
@@ -25,5 +25,39 @@ export class TaskRepository implements ITaskRepository {
   async delete(id: string): Promise<true>{
   await this.prisma.task.delete({ where: { id } });
     return true;
+  }
+
+  async update(data: IUpdateTaskRepository): Promise<Task> {
+    return this.prisma.task.update({
+      where:{
+        id: data.id
+      },
+      data:{
+        name: data.name,
+        description: data.description
+      }
+    })
+  }
+
+  async changeStatus(id: string): Promise<Task> {
+    const existTask = await this.prisma.task.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!existTask) {
+      throw new Error(`Tarefa com o ID ${id} não encontrada.`);
+    }
+
+    const newStatus = !existTask.status;
+    return await this.prisma.task.update({
+      where: {
+        id,
+      },
+      data: {
+        status: newStatus,
+      },
+    });
   }
 }
