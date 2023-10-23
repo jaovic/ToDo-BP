@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { SingUpAuthDto } from '../dto/singup-auth.dto';
 import { PrismaService } from 'src/prisma.service';
 import * as bcrypt from 'bcrypt';
+import { Prisma, User } from '@prisma/client';
+import { IAuthRepository } from '../structure/IRepository.structure';
 
 @Injectable()
-export class AuthRepository {
+export class AuthRepository implements IAuthRepository{
   constructor(private prisma: PrismaService){}
-  async create(createAuthDto: SingUpAuthDto) {
+  async create(createAuthDto: SingUpAuthDto): Promise<Partial<User>> {
     try {
       createAuthDto.password = await bcrypt.hash(createAuthDto.password, 10);
       const user = await this.prisma.user.create({
@@ -20,14 +22,14 @@ export class AuthRepository {
       delete user.token
       delete user.Refresh_Token
       delete user.codeSms
-      delete user.isVerified
+      delete user.isVerified      
       return user;
     } catch (error: any) {
       throw new Error(error);
     }
   
   }
-  async findByEmail(email: string) {
+  async findByEmail(email: string): Promise<User> {
     try {
       return await this.prisma.user.findUnique({
         where: { email },
@@ -37,7 +39,7 @@ export class AuthRepository {
     }
   }
   
-  async findById(id: string) {
+  async findById(id: string): Promise<User> {
     try {
       return await this.prisma.user.findUnique({
         where: { id },
@@ -47,7 +49,7 @@ export class AuthRepository {
     }
   }
 
-  async findByRefreshToken(refreshToken: string) {
+  async findByRefreshToken(refreshToken: string): Promise<User> {
     try {
       return await this.prisma.user.findUnique({
         where: { Refresh_Token: refreshToken },
@@ -57,31 +59,33 @@ export class AuthRepository {
     }
   }
 
-  async updateRefreshToken(id: string, refreshToken: string) {
+  async updateRefreshToken(id: string, refreshToken: string): Promise<number> {
     try {
-      return await this.prisma.user.updateMany({
+      const result: Prisma.BatchPayload =  await this.prisma.user.updateMany({
         where: {
           id,
         },
         data: { Refresh_Token: refreshToken },
       });
+      return result.count;
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
 
-  async updateToken(id: string, token: string) {
+  async updateToken(id: string, token: string): Promise<number> {
     try {
-      return await this.prisma.user.updateMany({
+      const result: Prisma.BatchPayload =  await this.prisma.user.updateMany({
         where: { id },
         data: { token },
       });
+      return result.count;
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
 
-  async logout(userId: string) {
+  async logout(userId: string): Promise<true> {
     try {
       await this.prisma.user.updateMany({
         where: {
@@ -94,26 +98,15 @@ export class AuthRepository {
           Refresh_Token: 'null',
         },
       });
-      await this.prisma.user.updateMany({
-        where: {
-          id: userId,
-          token: {
-            not: 'null',
-          },
-        },
-        data: {
-          token: 'null',
-        },
-      });
       return true;
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
 
-  async saveCode(id: string, code: string) {
+  async saveCode(id: string, code: string): Promise<number> {
     try {
-      return await this.prisma.user.updateMany({
+      const result: Prisma.BatchPayload = await this.prisma.user.updateMany({
         where: {
           id,
         },
@@ -121,12 +114,13 @@ export class AuthRepository {
           codeSms: code,
         },
       });
+      return result.count;
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
     }
   }
 
-  async verifyCode(id: string) {
+  async verifyCode(id: string): Promise<boolean> {
     try {
       const user = await this.prisma.user.findUnique({
         where: {
@@ -142,9 +136,9 @@ export class AuthRepository {
     }
   }
 
-  async updateCode(id: string) {
+  async updateCode(id: string): Promise<number> {
     try {
-      return await this.prisma.user.updateMany({
+      const result: Prisma.BatchPayload = await this.prisma.user.updateMany({
         where: {
           id,
         },
@@ -153,6 +147,7 @@ export class AuthRepository {
           isVerified: true,
         },
       });
+      return result.count;
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
     }
