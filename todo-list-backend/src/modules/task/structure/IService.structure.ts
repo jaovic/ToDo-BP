@@ -12,12 +12,18 @@ export interface IUpdateTask {
     description?: string;
 }
 
+
+export interface IFindTasks {
+    id: string,
+    page: number;
+}
+
 export interface ICreateTaskService {
     execute(data: ICreateTask): Promise<Task>;
 }
 
 export interface IFindTasksService {
-    execute(id: string): Promise<Task[]>;
+    execute(data: IFindTasks): Promise<Task[]>;
 } 
 export interface IDeleteTasksService {
     execute(id: string): Promise<true>;

@@ -10,6 +10,7 @@ import { UpdateTaskService } from "./service/writing/updateTask.service";
 import { ChangeStatusTaskService } from "./service/writing/changeStatusTask.service";
 import { UpdateTaskDto, UpdateTaskParam } from "./dto/update-task.dto";
 import { ChangeStatusTaskParam } from "./dto/changeStatus-task.dto";
+import { FindTasksParam } from "./dto/find-task.dto";
 
 @Controller('task')
 export class TaskController {
@@ -33,9 +34,9 @@ export class TaskController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Get('/findTasks')
-  async findTasks(@Req() req: any){
-    return this.findTasksService.execute(req.user.id)
+  @Get('/findTasks/:page')
+  async findTasks(@Param() param: FindTasksParam, @Req() req: any){
+    return this.findTasksService.execute({id: req.user.id,page: Number(param.page)})
   }
 
   @UseGuards(AuthGuard('jwt'))

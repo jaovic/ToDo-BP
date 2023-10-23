@@ -2,7 +2,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { TaskRepository } from "../../repository/task.repository";
 import { ITaskRepository } from "../../structure/IRepository.structure";
 import { Task } from "@prisma/client";
-import { IFindTasksService } from "../../structure/IService.structure";
+import { IFindTasks, IFindTasksService } from "../../structure/IService.structure";
 
 @Injectable()
 export class FindTasksService implements IFindTasksService {
@@ -11,7 +11,7 @@ export class FindTasksService implements IFindTasksService {
     @Inject(TaskRepository)
     private readonly taskRepository: ITaskRepository,
   ) {}
-  async execute(id: string ): Promise<Task[]> {
-    return this.taskRepository.findTasks(id)
+  async execute(data: IFindTasks ): Promise<Task[]> {
+    return this.taskRepository.findTasks(data.id,{page: data.page})
   }
 }
