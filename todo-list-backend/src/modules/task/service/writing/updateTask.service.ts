@@ -11,9 +11,7 @@ export class UpdateTaskService implements IUpdateTasksService {
     @Inject(TaskRepository)
     private readonly taskRepository: ITaskRepository,
   ) {}
-  async execute(id: string, body: IUpdateTask ): Promise<Task> {
-    console.log('service', id, body);
-    
+  async execute(id: string, body: IUpdateTask ): Promise<Task> {    
     return this.taskRepository.update({id, name:body.name, description: body.description})
   }
 }
