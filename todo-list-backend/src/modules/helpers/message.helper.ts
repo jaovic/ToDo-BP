@@ -18,4 +18,6 @@ export const MessagesHelper = {
     USER_ID_REQUIRED: 'user ID is required',
     TASK_ID_REQUIRED: 'task ID is required',
     TASK_ID_INVALID: 'task ID is invalid',
+    PAGE_REQUIRED: 'page number is required',
+    PAGE_INVALID: 'page has to be a string',
 }
