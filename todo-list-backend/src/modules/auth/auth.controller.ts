@@ -1,38 +1,54 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, Req, UseGuards } from '@nestjs/common';
 import { SingUpAuthDto } from './dto/singup-auth.dto';
-import { AuthService } from './service/auth.service';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { verifyCodeAuthDto } from './dto/verifyCode.dto';
+import { CreateUserService } from './service/writing/createUser.service';
+import { ICreateUserService, ILoginUserService, ILogoutUserService, IRefreshTokenService, IVerifyCodeService } from './structure/IService.structure';
+import { LoginUserService } from './service/reading/loginUser.service';
+import { LogoutUserService } from './service/writing/logoutUser.service';
+import { RefreshTokenService } from './service/writing/refreshToken.service';
+import { VerifyCodeService } from './service/writing/verifyCode.service';
 
 
 @Controller('auth')
-export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+export class AuthController {  
+  constructor(
+    @Inject(CreateUserService)
+    private readonly createUserService: ICreateUserService,
+    @Inject(LoginUserService)
+    private readonly loginUserService: ILoginUserService,
+    @Inject(LogoutUserService)
+    private readonly logoutUserService: ILogoutUserService,
+    @Inject(RefreshTokenService)
+    private readonly refreshTokenService: IRefreshTokenService,
+    @Inject(VerifyCodeService)
+    private readonly verifyCodeService: IVerifyCodeService,
+  ) {}
 
   @Post('singup')
   async singUp(@Body() singUpAuthDto: SingUpAuthDto) {
-    return await this.authService.create(singUpAuthDto);
+    return await this.createUserService.execute(singUpAuthDto);
   }
 
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Body() body: LoginAuthDto) {
-    return await this.authService.login(body);
+    return await this.loginUserService.execute(body);
   }
   @UseGuards(AuthGuard('jwt'))
   @Post('logout')
   async logout(@Req() req: any) {
-    return await this.authService.logout(req.user.id);
+    return await this.logoutUserService.execute(req.user.id);
   }
 
   @Get('refreshtoken')
   async refreshToken(@Req() req: any) {
-    return await this.authService.refreshToken(req);
+    return await this.refreshTokenService.execute(req);
   }
 
   @Post('verify')
   async verifyCode(@Body() body: verifyCodeAuthDto) {
-    return await this.authService.verifyCode(body.email, body.code);
+    return await this.verifyCodeService.execute(body.email, body.code);
   }
 }
