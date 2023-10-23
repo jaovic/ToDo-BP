@@ -21,6 +21,13 @@ export class TaskRepository implements ITaskRepository {
           userId: data.userId,
           categoryId,
         },
+        include:{
+          category:{
+            select:{
+              name: true
+            }
+          }
+        }
       });
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
