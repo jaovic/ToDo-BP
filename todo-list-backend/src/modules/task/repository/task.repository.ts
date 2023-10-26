@@ -5,6 +5,7 @@ import {
   IFindTasksPaginationRepository,
   ITaskRepository,
   IUpdateTaskRepository,
+  UpdateData,
 } from '../structure/IRepository.structure';
 import { Task } from '@prisma/client';
 
@@ -21,13 +22,13 @@ export class TaskRepository implements ITaskRepository {
           userId: data.userId,
           categoryId,
         },
-        include:{
-          category:{
-            select:{
-              name: true
-            }
-          }
-        }
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
+          },
+        },
       });
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
@@ -74,14 +75,22 @@ export class TaskRepository implements ITaskRepository {
 
   async update(data: IUpdateTaskRepository): Promise<Task> {
     try {
+      // Verifique se os campos não são uma string vazia antes de atualizar
+      const updateData: UpdateData = {};
+
+      if (data.name !== undefined && data.name !== '') {
+        updateData.name = data.name;
+      }
+
+      if (data.description !== undefined && data.description !== '') {
+        updateData.description = data.description;
+      }
+
       return this.prisma.task.update({
         where: {
           id: data.id,
         },
-        data: {
-          name: data.name,
-          description: data.description,
-        },
+        data: updateData,
       });
     } catch (error) {
       throw new Error(`Prisma Error: ${error}`);
