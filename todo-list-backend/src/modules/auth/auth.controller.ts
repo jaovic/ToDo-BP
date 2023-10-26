@@ -1,18 +1,33 @@
-import { Body, Controller, Get, Inject, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { SingUpAuthDto } from './dto/singup-auth.dto';
 import { LoginAuthDto } from './dto/login-auth.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { verifyCodeAuthDto } from './dto/verifyCode.dto';
 import { CreateUserService } from './service/writing/createUser.service';
-import { ICreateUserService, ILoginUserService, ILogoutUserService, IRefreshTokenService, IVerifyCodeService } from './structure/IService.structure';
+import {
+  ICreateUserService,
+  ILoginUserService,
+  ILogoutUserService,
+  IRefreshTokenService,
+  IVerifyCodeService,
+  IVerifyTokenService,
+} from './structure/IService.structure';
 import { LoginUserService } from './service/reading/loginUser.service';
 import { LogoutUserService } from './service/writing/logoutUser.service';
 import { RefreshTokenService } from './service/writing/refreshToken.service';
 import { VerifyCodeService } from './service/writing/verifyCode.service';
-
+import { VerifyTokenService } from './service/reading/verifyToken.service';
 
 @Controller('auth')
-export class AuthController {  
+export class AuthController {
   constructor(
     @Inject(CreateUserService)
     private readonly createUserService: ICreateUserService,
@@ -24,6 +39,8 @@ export class AuthController {
     private readonly refreshTokenService: IRefreshTokenService,
     @Inject(VerifyCodeService)
     private readonly verifyCodeService: IVerifyCodeService,
+    @Inject(VerifyTokenService)
+    private readonly verifyTokenService: IVerifyTokenService,
   ) {}
 
   @Post('singup')
@@ -50,5 +67,10 @@ export class AuthController {
   @Post('verify')
   async verifyCode(@Body() body: verifyCodeAuthDto) {
     return await this.verifyCodeService.execute(body.email, body.code);
+  }
+
+  @Get('verifyToken')
+  async verifyToken(@Req() req: any) {
+    return await this.verifyTokenService.execute(req);
   }
 }

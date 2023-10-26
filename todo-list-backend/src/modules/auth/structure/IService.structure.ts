@@ -1,40 +1,48 @@
-import { User } from "@prisma/client";
+import { User } from '@prisma/client';
 
 export interface IcreateUser {
-    name: string
-    email: string;
-    password: string
-    cpf: string;
-    phone: string;
+  name: string;
+  email: string;
+  password: string;
+  cpf: string;
+  phone: string;
 }
 
 export interface IRefreshTokenReturn {
-    token: string
-    refreshToken: string
+  token: string;
+  refreshToken: string;
 }
 
 export interface IGetTokenRetun {
-    token: string
-    refreshToken: string
+  token: string;
+  refreshToken: string;
+}
+
+export interface ILoginReturn {
+  token: { token: string; refreshToken: string };
+  user: Partial<User>;
 }
 export interface ICreateUserService {
-    execute(data: IcreateUser): Promise<Partial<User>>;
+  execute(data: IcreateUser): Promise<Partial<User>>;
 }
 export interface IGetTokenService {
-    execute(id: string, email: string): Promise<IGetTokenRetun>;
+  execute(id: string, email: string): Promise<IGetTokenRetun>;
 }
 export interface ILoginUserService {
-    execute(user: any): Promise<Partial<User>>;
+  execute(user: any): Promise<ILoginReturn>;
 }
 export interface ILogoutUserService {
-    execute(id: string): Promise<true>;
+  execute(id: string): Promise<true>;
 }
 export interface IRefreshTokenService {
-    execute(req: any): Promise<IRefreshTokenReturn>;
+  execute(req: any): Promise<IRefreshTokenReturn>;
 }
 export interface IValidateUserService {
-    execute(email: string, password: string): Promise<true>;
+  execute(email: string, password: string): Promise<true>;
 }
 export interface IVerifyCodeService {
-    execute(email: string, code: string): Promise<true>;
+  execute(email: string, code: string): Promise<true>;
+}
+export interface IVerifyTokenService {
+  execute(req: any): Promise<IRefreshTokenReturn>;
 }
