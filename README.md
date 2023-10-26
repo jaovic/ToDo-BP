@@ -76,6 +76,8 @@ TWILIO_PHONE_NUMBER=
 npm run start:dev
 ```
 O backend estará disponível em `http://localhost:3000`
+### Documentação
+Abra seu navegador da web e acesse `http://localhost:3000/docs/` para acessar a documentação.
 
 Agora, você pode configurar e executar o frontend. Siga estas etapas:
 1 - Acesse a pasta do frontend:
@@ -95,7 +97,6 @@ O frontend estará disponível em `http://localhost:5173`.
 
 ### Acessando o Aplicativo
 Abra seu navegador da web e acesse `http://localhost:5173` ou `http://127.0.0.1:5173` para acessar o aplicativo.
-
 Agora você deve ter o projeto ToDo em execução localmente. Divirta-se explorando o aplicativo!
 ## Contribuições
 
