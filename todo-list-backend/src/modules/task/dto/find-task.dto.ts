@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 import { MessagesHelper } from 'src/modules/helpers/message.helper';
 
 export class FindTasksParam {
