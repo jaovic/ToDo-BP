@@ -1,14 +1,14 @@
-import { Category } from "@prisma/client";
+import { Category } from '@prisma/client';
 
 export interface ICreateCategory {
-    name: string
+  name: string;
 }
 
 export interface IFindCategory {
-    name: string
+  name: string;
 }
 
 export interface ICategoryRepository {
-    create(data:ICreateCategory): Promise<Category>;
-    findCategory(data: IFindCategory): Promise<Category>
+  create(data: ICreateCategory): Promise<Category>;
+  findCategory(data: IFindCategory): Promise<Category>;
 }

@@ -9,15 +9,14 @@ import { IValidateUserService } from '../structure/IService.structure';
 export class localStrategy extends PassportStrategy(Strategy) {
   constructor(
     @Inject(ValidateUserService)
-    private readonly validateUserService: IValidateUserService
-    ) {
+    private readonly validateUserService: IValidateUserService,
+  ) {
     super({
       usernameField: 'email',
     });
   }
 
   async validate(email: string, password: string) {
-    
     const user = await this.validateUserService.execute(email, password);
 
     if (!user) {

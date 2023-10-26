@@ -75,7 +75,6 @@ export class TaskRepository implements ITaskRepository {
 
   async update(data: IUpdateTaskRepository): Promise<Task> {
     try {
-      // Verifique se os campos não são uma string vazia antes de atualizar
       const updateData: UpdateData = {};
 
       if (data.name !== undefined && data.name !== '') {
