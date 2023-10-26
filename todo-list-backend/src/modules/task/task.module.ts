@@ -13,6 +13,16 @@ import { UpdateTaskService } from './service/writing/updateTask.service';
 @Module({
   imports: [],
   controllers: [TaskController],
-  providers: [CreateTaskService, TaskRepository, PrismaService, CategoryRepository, FindTasksService, AuthRepository, DeleteTaskService, ChangeStatusTaskService, UpdateTaskService],
+  providers: [
+    CreateTaskService,
+    TaskRepository,
+    PrismaService,
+    CategoryRepository,
+    FindTasksService,
+    AuthRepository,
+    DeleteTaskService,
+    ChangeStatusTaskService,
+    UpdateTaskService,
+  ],
 })
 export class TaskModule {}

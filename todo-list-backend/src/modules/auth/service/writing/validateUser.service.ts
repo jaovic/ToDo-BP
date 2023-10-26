@@ -1,8 +1,8 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { AuthRepository } from "../../repository/auth.repository";
-import { IValidateUserService } from "../../structure/IService.structure";
+import { Inject, Injectable } from '@nestjs/common';
+import { AuthRepository } from '../../repository/auth.repository';
+import { IValidateUserService } from '../../structure/IService.structure';
 import * as bcrypt from 'bcrypt';
-import { IAuthRepository } from "../../structure/IRepository.structure";
+import { IAuthRepository } from '../../structure/IRepository.structure';
 
 @Injectable()
 export class ValidateUserService implements IValidateUserService {
@@ -10,7 +10,7 @@ export class ValidateUserService implements IValidateUserService {
     @Inject(AuthRepository)
     private readonly authRepository: IAuthRepository,
   ) {}
-async execute(email: string, password: string): Promise<true> {
+  async execute(email: string, password: string): Promise<true> {
     let user: {
       id: string;
       name: string;
@@ -26,8 +26,8 @@ async execute(email: string, password: string): Promise<true> {
     };
     try {
       user = await this.authRepository.findByEmail(email);
-      if(!user){
-        return null
+      if (!user) {
+        return null;
       }
     } catch (error) {
       return null;

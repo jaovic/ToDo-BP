@@ -6,8 +6,8 @@ import { Prisma, User } from '@prisma/client';
 import { IAuthRepository } from '../structure/IRepository.structure';
 
 @Injectable()
-export class AuthRepository implements IAuthRepository{
-  constructor(private prisma: PrismaService){}
+export class AuthRepository implements IAuthRepository {
+  constructor(private prisma: PrismaService) {}
   async create(createAuthDto: SingUpAuthDto): Promise<Partial<User>> {
     try {
       createAuthDto.password = await bcrypt.hash(createAuthDto.password, 10);
@@ -16,18 +16,18 @@ export class AuthRepository implements IAuthRepository{
           name: createAuthDto.name,
           email: createAuthDto.email,
           password: createAuthDto.password,
-          phone: createAuthDto.phone
-      }});
-      delete user.password
-      delete user.token
-      delete user.Refresh_Token
-      delete user.codeSms
-      delete user.isVerified      
+          phone: createAuthDto.phone,
+        },
+      });
+      delete user.password;
+      delete user.token;
+      delete user.Refresh_Token;
+      delete user.codeSms;
+      delete user.isVerified;
       return user;
     } catch (error: any) {
       throw new Error(error);
     }
-  
   }
   async findByEmail(email: string): Promise<User> {
     try {
@@ -38,7 +38,7 @@ export class AuthRepository implements IAuthRepository{
       throw new Error(`Prisma Error: ${error}`);
     }
   }
-  
+
   async findById(id: string): Promise<User> {
     try {
       return await this.prisma.user.findUnique({
@@ -61,7 +61,7 @@ export class AuthRepository implements IAuthRepository{
 
   async updateRefreshToken(id: string, refreshToken: string): Promise<number> {
     try {
-      const result: Prisma.BatchPayload =  await this.prisma.user.updateMany({
+      const result: Prisma.BatchPayload = await this.prisma.user.updateMany({
         where: {
           id,
         },
@@ -75,7 +75,7 @@ export class AuthRepository implements IAuthRepository{
 
   async updateToken(id: string, token: string): Promise<number> {
     try {
-      const result: Prisma.BatchPayload =  await this.prisma.user.updateMany({
+      const result: Prisma.BatchPayload = await this.prisma.user.updateMany({
         where: { id },
         data: { token },
       });
