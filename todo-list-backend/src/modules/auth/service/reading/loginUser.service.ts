@@ -1,9 +1,12 @@
-import { HttpException, HttpStatus, Inject, Injectable } from "@nestjs/common";
-import { IGetTokenService, ILoginUserService } from "../../structure/IService.structure";
-import { GetTokenService } from "../writing/getToken.service";
-import { AuthRepository } from "../../repository/auth.repository";
-import { User } from "@prisma/client";
-import { IAuthRepository } from "../../structure/IRepository.structure";
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  IGetTokenService,
+  ILoginReturn,
+  ILoginUserService,
+} from '../../structure/IService.structure';
+import { GetTokenService } from '../writing/getToken.service';
+import { AuthRepository } from '../../repository/auth.repository';
+import { IAuthRepository } from '../../structure/IRepository.structure';
 
 @Injectable()
 export class LoginUserService implements ILoginUserService {
@@ -11,11 +14,11 @@ export class LoginUserService implements ILoginUserService {
     @Inject(AuthRepository)
     private readonly authRepository: IAuthRepository,
     @Inject(GetTokenService)
-    private readonly getTokenService: IGetTokenService
+    private readonly getTokenService: IGetTokenService,
   ) {}
-async execute(user: any): Promise<Partial<User>> {
+  async execute(user: any): Promise<ILoginReturn> {
     const data = await this.authRepository.findByEmail(user.email);
-    
+
     if (!data) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     }
@@ -23,6 +26,13 @@ async execute(user: any): Promise<Partial<User>> {
     if (!isVerified) {
       throw new HttpException('Code not verified', HttpStatus.UNAUTHORIZED);
     }
-    return await this.getTokenService.execute(data.id, data.email);
+    delete data.password;
+    delete data.Refresh_Token;
+    delete data.codeSms;
+    delete data.isVerified;
+    delete data.token;
+    const token = await this.getTokenService.execute(data.id, data.email);
+
+    return { token: token, user: data };
   }
 }
