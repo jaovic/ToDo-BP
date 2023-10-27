@@ -80,6 +80,8 @@ O backend estará disponível em `http://localhost:3000`
 Abra seu navegador da web e acesse `http://localhost:3000/docs/` para acessar a documentação.
 
 Agora, você pode configurar e executar o frontend. Siga estas etapas:
+<br/>
+
 1 - Acesse a pasta do frontend:
 ```bash
 cd todo-list-frontend
