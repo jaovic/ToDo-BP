@@ -79,6 +79,8 @@ O backend estará disponível em `http://localhost:3000`
 ### Documentação
 Abra seu navegador da web e acesse `http://localhost:3000/docs/` para acessar a documentação.
 
+## Configurando o Frontend
+
 Agora, você pode configurar e executar o frontend. Siga estas etapas:
 <br/>
 
